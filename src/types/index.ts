@@ -3,7 +3,7 @@ export interface Player {
   name: string;
   teamId: number;
   role: string;
-  tier: Tier
+  tier: string
 }
 
 export interface TeamData {
