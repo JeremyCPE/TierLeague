@@ -6,7 +6,7 @@ import { Player, TeamData} from '../types';
 import LFLLogo from '../assets/lfl_logo.png'
 import {Save} from 'lucide-react'
 import { toPng } from 'html-to-image';
-import Modal from './Modal.jsx'
+import Modal from './Modal';
 
 export const TierList: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);

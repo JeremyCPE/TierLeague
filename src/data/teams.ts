@@ -14,13 +14,13 @@ import Gentlemates from "../assets/Gentlemates.png"
 export const fullteams: TeamData[] = [
   { id: 1, name: "IJC", rank: 1, logo : IJC },
   { id: 2, name: "KCB", rank: 2, logo : KCB },
-  { id: 3, name: "BKRog", rank: 3, logo : BKRog },
-  { id: 4, name: "VitaBee", rank: 4, logo : VitaBee },
-  { id: 5, name: "Gameward", rank: 5, logo : Gameward },
-  { id: 6, name: "Joblife", rank: 6, logo : Joblife },
-  { id: 7, name: "TeamGO", rank: 7, logo : TeamGo },
-  { id: 8, name: "Solary", rank: 8, logo : Solary },
-  { id: 9, name: "BDS Aca", rank: 9, logo : BDSAca },
-  { id: 10, name: "Gentlemates", rank: 10, logo : Gentlemates },]
+  { id: 3, name: "BKR", rank: 3, logo : BKRog },
+  { id: 4, name: "VITB", rank: 4, logo : VitaBee },
+  { id: 5, name: "GW", rank: 5, logo : Gameward },
+  { id: 6, name: "JL", rank: 6, logo : Joblife },
+  { id: 7, name: "GO", rank: 7, logo : TeamGo },
+  { id: 8, name: "SLY", rank: 8, logo : Solary },
+  { id: 9, name: "BDSA", rank: 9, logo : BDSAca },
+  { id: 10, name: "M8", rank: 10, logo : Gentlemates },]
 
 export const totalTeams = fullteams.length;

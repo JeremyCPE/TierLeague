@@ -1,6 +1,14 @@
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, children }) => {
+interface ModalProps {
+  isOpen: boolean; // Controls whether the modal is visible
+  onClose: () => void; // Function to close the modal
+  title?: string; // Optional title for the modal
+  children: React.ReactNode; // Content of the modal
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+
   if (!isOpen) return null;
 
   return (
