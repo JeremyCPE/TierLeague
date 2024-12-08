@@ -62,7 +62,7 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                   <td className="whitespace-nowrap items-end w-10">
                     <select
                       className='items-center rounded-lg bg-[#251c0d] hover:bg-[#15100c]'
-                      style={{ color: playerColor} }
+                      style={{ color: playerColor, direction:"rtl"} }
                       value={player.tier}
                       onChange={(e) => onUpdatePlayerTier(player.id, e.target.value)}
                     >
@@ -70,7 +70,7 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                         <option 
                           key={index} 
                           value={tier.tier}
-                          style={{ color: tier.color, } }
+                          style={{ color: tier.color} }
                         >
                          {tier.tier}
                         </option>
