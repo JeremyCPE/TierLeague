@@ -20,7 +20,7 @@ export const TierList: React.FC = () => {
       tableRef.current.style.display = "block";
       const pngDataUrl = await toPng(tableRef.current, { quality: 1.0 });
       const link = document.createElement('a');
-      link.download = 'table-desktop-design.png';
+      link.download = 'my-lflrank2025';
       link.href = pngDataUrl;
       link.click();
       tableRef.current.style.display = "none";
