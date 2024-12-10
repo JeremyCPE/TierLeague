@@ -10,7 +10,7 @@ const COLORS = {
 };
 
 export const tierLevel: Tier[] = [
-  { tier: '_', color: COLORS.WHITE },
+  { tier: '-', color: COLORS.WHITE },
   { tier: 'G', color: COLORS.RED },
   { tier: 'S+', color: COLORS.YELLOW },
   { tier: 'S', color: COLORS.YELLOW },

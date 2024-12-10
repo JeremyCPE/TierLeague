@@ -55,12 +55,12 @@ export const TierList: React.FC = () => {
     })}
 
   return (
-    <div>
+    <div className='bg-[#251c0d]'>
 
-    <div ref={tableRef} className='bg-black' style={{ display:"none", width: "1096px", height: "980px" }}>
-        <div className='px-4 items-center flex justify-between'>
-        <img src={LFLLogo} alt="LFL_Logo" className='w-20' />
-        <h1 className="text-3xl font-bold text-left mb-8 text-white">
+    <div ref={tableRef} className='bg-[#251c0d]' style={{ display:"none", width: "1096px", height: "auto" }}>
+    <div className='px-4 py-4 flex items-center'>
+        <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
+        <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
         </h1>  
         </div>
@@ -77,13 +77,13 @@ export const TierList: React.FC = () => {
       </div>
     </div>
 
-      <div className='bg-black'>
-        <div className='px-4 items-center flex justify-between'>
-        <img src={LFLLogo} alt="LFL_Logo" className='w-20' />
-        <h1 className="text-3xl font-bold text-left mb-8 text-white">
+      <div className=''>
+      <div className='px-4 py-4 flex items-center'>
+        <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
+        <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
-        </h1> 
-      </div>
+        </h1>  
+        </div>
       <div className='grid md:grid-cols-5 gap-4 mx-auto'>
           {teamRanking.map(team => (
             <TeamTables
@@ -99,7 +99,7 @@ export const TierList: React.FC = () => {
       </div>
       <div className='flex'>
             <button onClick={saveAsPng}
-            className="bg-[#251c0d] text-white px-8 py-3 rounded-full flex items-end gap-2 hover:bg-[#15100c] transition-colors">
+            className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-end gap-2 hover:bg-[#15100c] transition-colors">
                 <Save className="w-5 h-5" />
                 Export
             </button>   

@@ -23,9 +23,9 @@ export const TeamTables: React.FC<TeamTableProps> = ({
   if (teamPlayers.length === 0) return null;
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center mb-4 justify-between ml-4 mr-4">
-          <img src={team.logo} className='w-1/5 h-1/5'></img>
+    <div className="m-4">
+      <div className="flex items-center mb-4 justify-between">
+          <img src={team.logo} className='w-1/4 h-1/4'></img>
           <h2 className="text-lg font-bold text-white text-center">{team.name}</h2>
           <div className="flex items-center space-x-4">
           <TeamRankInput
@@ -36,13 +36,13 @@ export const TeamTables: React.FC<TeamTableProps> = ({
         </div>
 
       </div>
-      <div className="bg-[#251c0d] rounded-lg shadow overflow-hidden">
+      <div className="rounded-lg shadow overflow-hidden">
         <table className="w-full">
           <thead>
             <tr>
             </tr>
           </thead>
-          <tbody className="bg-[#251c0d] divide-y divide-gray-200">
+          <tbody className="">
             {teamPlayers.map((player) => {
 
               const RoleLogo = roleLogos[player.role as keyof typeof roleLogos];
@@ -55,9 +55,9 @@ export const TeamTables: React.FC<TeamTableProps> = ({
               
               return (
                 <tr key={player.id}>
-                  <td className="pl-0 py-4 whitespace-nowrap flex items-center">
-                    <img src={RoleLogo} className='w-10 h-10 text-white'></img>
-                    <span className="text-left font-bold text-white">{player.name}</span>
+                  <td className="pl-0 py-2 whitespace-nowrap flex items-center">
+                    <img src={RoleLogo} className='w-8 h-8 text-white'></img>
+                    <span className="text-left font-bold text-white pl-2">{player.name}</span>
                   </td>
                   <td className="whitespace-nowrap items-end w-10">
                     <select
