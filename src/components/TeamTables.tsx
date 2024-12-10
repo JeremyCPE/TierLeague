@@ -64,8 +64,8 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                   </td>
                   <td className="whitespace-nowrap items-end w-10">
                     <select
-                      className={`items-center rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : '' } `}
-                      style={{ color: playerColor, direction:"rtl",}}
+                      className={`items-center text-lg rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : '' } `}
+                      style={{ color: playerColor, direction:"rtl", font:"bold",textAlign:"center"}}
                       value={player.tier}
                       onChange={(e) => onUpdatePlayerTier(player.id, e.target.value)}
                     >
