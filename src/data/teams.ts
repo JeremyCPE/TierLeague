@@ -5,7 +5,7 @@ import BKRog from "../assets/BKRog.png"
 import VitaBee from "../assets/Vitality.png"
 import Gameward from "../assets/Gameward.png"
 import Joblife from "../assets/joblife.png"
-import TeamGo from "../assets/Go.png"
+import Galions from "../assets/GL.png"
 import Solary from "../assets/Solary.png"
 import BDSAca from "../assets/BDSAca.png"
 import Gentlemates from "../assets/Gentlemates.png"
@@ -18,7 +18,7 @@ export const fullteams: TeamData[] = [
   { id: 4, name: "VITB", rank: 4, logo : VitaBee },
   { id: 5, name: "GW", rank: 5, logo : Gameward },
   { id: 6, name: "JL", rank: 6, logo : Joblife },
-  { id: 7, name: "GO", rank: 7, logo : TeamGo },
+  { id: 7, name: "GL", rank: 7, logo : Galions },
   { id: 8, name: "SLY", rank: 8, logo : Solary },
   { id: 9, name: "BDSA", rank: 9, logo : BDSAca },
   { id: 10, name: "M8", rank: 10, logo : Gentlemates },]

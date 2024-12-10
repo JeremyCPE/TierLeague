@@ -10,13 +10,15 @@ interface TeamTableProps {
   players: Player[];
   onUpdatePlayerTier: (playerId: string, tier: string) => void;
   onUpdateTeamRank: (team: TeamData, rank: number) => void;
+  hideChevron : boolean
 }
 
 export const TeamTables: React.FC<TeamTableProps> = ({ 
   team, 
   players, 
   onUpdatePlayerTier,
-  onUpdateTeamRank 
+  onUpdateTeamRank,
+  hideChevron 
 }) => {
   const teamPlayers = players.filter(player => player.teamId === team.id);
 
@@ -32,6 +34,7 @@ export const TeamTables: React.FC<TeamTableProps> = ({
             team={team}
             rank={team.rank}
             onUpdateRank={onUpdateTeamRank}
+            hideChevron={hideChevron}
           />
         </div>
 
@@ -61,8 +64,8 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                   </td>
                   <td className="whitespace-nowrap items-end w-10">
                     <select
-                      className='items-center rounded-lg bg-[#251c0d] hover:bg-[#15100c]'
-                      style={{ color: playerColor, direction:"rtl"} }
+                      className={`items-center rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : '' } `}
+                      style={{ color: playerColor, direction:"rtl",}}
                       value={player.tier}
                       onChange={(e) => onUpdatePlayerTier(player.id, e.target.value)}
                     >

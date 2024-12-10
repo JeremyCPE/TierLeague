@@ -62,8 +62,8 @@ export const TierList: React.FC = () => {
         <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
         <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
-        </h1>  
-        </div>
+        </h1>
+      </div>
       <div className='grid grid-cols-5 gap-4'>
         {teamRanking.map(team => (
           <TeamTables
@@ -72,17 +72,20 @@ export const TierList: React.FC = () => {
             players={players}
             onUpdatePlayerTier={handleUpdatePlayerTier}
             onUpdateTeamRank={handleUpdateTeamRank}
+            hideChevron={true}
           />
         ))}
       </div>
+      <p className="text-gray-400 text-xs text-right">@_RedSeeds  @than_ontweeter</p>  
     </div>
 
       <div className=''>
+      
       <div className='px-4 py-4 flex items-center'>
         <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
         <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
-        </h1>  
+        </h1> 
         </div>
       <div className='grid md:grid-cols-5 gap-4 mx-auto'>
           {teamRanking.map(team => (
@@ -92,6 +95,7 @@ export const TierList: React.FC = () => {
               players={players}
               onUpdatePlayerTier={handleUpdatePlayerTier}
               onUpdateTeamRank={handleUpdateTeamRank}
+              hideChevron={false}
             />
           ))}
 
@@ -99,13 +103,13 @@ export const TierList: React.FC = () => {
       </div>
       <div className='flex'>
             <button onClick={saveAsPng}
-            className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-end gap-2 hover:bg-[#15100c] transition-colors">
+            className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
                 <Save className="w-5 h-5" />
                 Export
             </button>   
             {loading && <div className="spinner"></div>}
       </div>
-
+      <p className="text-gray-400 text-xs text-right">@_RedSeeds  @than_ontweeter</p>  
     </div>
   );
 };
