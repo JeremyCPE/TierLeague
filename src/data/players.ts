@@ -222,7 +222,7 @@ export const initialPlayers: Player[] = [
 
   {
     id: '31',
-    name: 'Ragnar',
+    name: 'Ragner',
     teamId: 7,
     role: 'Toplaner',
     tier: ''
