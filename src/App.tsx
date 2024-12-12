@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { initialPlayersLFL } from './data/players'
 import { initialPlayersLEC } from './data/playersLEC'
 import { teamsLFL, teamsLEC } from './data/teams'
-import { Trophy } from 'lucide-react'
 import LFLLogo from './assets/lfl_logo.png'
 import LECLogo from './assets/LEC_Logo.png'
 
