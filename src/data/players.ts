@@ -1,6 +1,6 @@
 import { Player } from '../types';
 
-export const initialPlayers: Player[] = [
+export const initialPlayersLFL: Player[] = [
   {
     id: '1',
     name: 'Howling',

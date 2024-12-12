@@ -1,18 +1,26 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import { TeamTables } from './TeamTables';
-import { fullteams } from '../data/teams';
-import { initialPlayers } from '../data/players';
 import { Player, TeamData} from '../types';
-import LFLLogo from '../assets/lfl_logo.png'
 import {Save} from 'lucide-react'
 import { toPng } from 'html-to-image';
 
-export const TierList: React.FC = () => {
-  const [players, setPlayers] = useState<Player[]>(initialPlayers);
+interface TierListInputProps {
+  fullplayers: Player[];
+  fullteams: TeamData[];
+  logo : string
+}
+
+export const TierList: React.FC<TierListInputProps> = ({fullplayers, fullteams, logo}) => {
+  const [players, setPlayers] = useState<Player[]>(fullplayers);
   const [teamRanking, setTeamRanking] = useState<TeamData[]>(fullteams);
   const [loading, setLoading] = useState(false);
 
   const tableRef = useRef<HTMLDivElement>(null); 
+
+  useEffect(() => {
+    setPlayers(fullplayers);
+    setTeamRanking(fullteams);
+  }, [fullplayers, fullteams]);
 
   const saveAsPng = async () => {
     if (tableRef.current) {
@@ -20,7 +28,7 @@ export const TierList: React.FC = () => {
       tableRef.current.style.display = "block";
       const pngDataUrl = await toPng(tableRef.current, { quality: 1.0 });
       const link = document.createElement('a');
-      link.download = 'my-lflrank2025';
+      link.download = 'my-rank2025';
       link.href = pngDataUrl;
       link.click();
       tableRef.current.style.display = "none";
@@ -59,7 +67,7 @@ export const TierList: React.FC = () => {
 
     <div ref={tableRef} className='bg-[#251c0d]' style={{ display:"none", width: "1096px", height: "auto" }}>
     <div className='px-4 py-4 flex items-center'>
-        <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
+        <img src={logo} alt="Logo" className='w-16' />
         <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
         </h1>
@@ -82,7 +90,7 @@ export const TierList: React.FC = () => {
       <div className=''>
       
       <div className='px-4 py-4 flex items-center'>
-        <img src={LFLLogo} alt="LFL_Logo" className='w-16' />
+        <img src={logo} alt="LFL_Logo" className='w-16' />
         <h1 className="text-2xl  text-white text-left mt-8 ml-4">
           Ranking Winter 2025
         </h1> 
