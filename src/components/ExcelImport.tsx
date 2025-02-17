@@ -15,8 +15,6 @@ interface ExcelImportInterface {
 
 export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, onTeamsChange, onSheetsChange }) => {
   const [workBook, setWorkBook] = useState<WorkBook | null>(null)
-  const [sheets, setSheets] = useState<{ name: string }[]>([])
-  const [selectedSheet, setSelectedSheet] = useState(sheets.length > 0 ? sheets[0].name : "")
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -51,36 +49,26 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
 
       // Transformer les noms des feuilles en objets { name: string }
       const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }));
-      setSheets(formattedSheets);
       onSheetsChange(formattedSheets);
 
       if (formattedSheets.length === 1) {
         // Sélection automatique si une seule feuille
         handleSheetChange(formattedSheets[0].name, workbook);
-      } else {
-        // Ne rien sélectionner si plusieurs feuilles
-        setSelectedSheet("");
       }
-
       setWorkBook(workbook);
     };
   };
-  const handleSheetSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const sheetName = event.target.value;
-    setSelectedSheet(sheetName);
-    handleSheetChange(sheetName);
-  };
 
   const handleSheetChange = (sheetName: string, workBookInstance?: WorkBook) => {
+    console.log('handleSheetChange', sheetName);
+
     const workbookToUse = workBookInstance || workBook;
     if (!workbookToUse) return;
 
-    setSelectedSheet(sheetName);
 
     let allPlayers: Player[] = [];
 
     const teams = generateTeams(workbookToUse, sheetName, excelPosition)
-
 
     teams.forEach((team, index) => {
       const teamPlayers = generatePlayers(workbookToUse, sheetName, excelPosition[index].columnTeam, excelPosition[index].startRow + 1, team);
@@ -103,7 +91,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
         id: i,
         name: teamName,
         rank: parseInt(teamRank),
-        logo: `https://raw.githubusercontent.com/VongoSaNDi/tier-list-lol/main/${teamName}.png`
+        logo: `https://raw.githubusercontent.com/VongoSanDi/tier-list-lol/main/${teamName}.png`
       })
     }
     return teams

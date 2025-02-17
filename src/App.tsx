@@ -1,39 +1,16 @@
 import { TierList } from './components/TierList'
 import { ExcelImport } from './components/ExcelImport'
-import { useState, useEffect } from 'react'
-import { initialPlayersLEC } from './data/playersLEC'
-import { teamsLEC } from './data/teams'
+import { useState } from 'react'
 import LFLLogo from './assets/lfl_logo.png'
-import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
 import { Save } from 'lucide-react'
 
 function App() {
-  const [selectedLeague, setSelectedLeague] = useState('LFL');
   const [players, setPlayers] = useState<Player[]>([])
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(false)
   const [sheets, setSheets] = useState<{ name: string }[]>([]);
   const [selectedSheet, setSelectedSheet] = useState<string>("");
-
-  useEffect(() => {
-    const fragment = window.location.hash.replace('#', '');
-    if (fragment === 'LEC' || fragment === 'LFL') {
-      setSelectedLeague(fragment);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      const fragment = window.location.hash.replace('#', '');
-      if (fragment === 'LEC' || fragment === 'LFL') {
-        setSelectedLeague(fragment);
-      }
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
 
   const handleOnPlayersChange = (updatedPlayers: Player[]): void => {
     setPlayers(updatedPlayers)
@@ -106,11 +83,7 @@ function App() {
 
       <div className="min-h-screen bg-black flex py-8 px-4 overflow-hidden">
         <div className='max-w-6xl mx-auto'>
-          {selectedLeague === 'LFL' ? (
-            <TierList fullteams={teams} fullplayers={players} logolfl={LFLLogo} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
-          ) : (
-            <TierList fullteams={teamsLEC} fullplayers={initialPlayersLEC} logolfl={LECLogo} onPlayersChange={handleOnPlayersChange} />
-          )}
+          <TierList fullteams={teams} fullplayers={players} logolfl={LFLLogo} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
         </div>
       </div>
     </>
