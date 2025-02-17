@@ -3,22 +3,24 @@ import { Player, } from '../types';
 import { roleLogos } from '../data/roles';
 import { tierLevel } from '../data/tiers';
 import { TeamRankInput } from './TeamRankInput';
-import { TeamData } from '../types';
+import { Team } from '../types';
 
 interface TeamTableProps {
-  team: TeamData;
+  team: Team;
+  teamsLength: number;
   players: Player[];
   onUpdatePlayerTier: (playerId: string, tier: string) => void;
-  onUpdateTeamRank: (team: TeamData, rank: number) => void;
-  hideChevron : boolean
+  onUpdateTeamRank: (team: Team, rank: number) => void;
+  hideChevron: boolean
 }
 
-export const TeamTables: React.FC<TeamTableProps> = ({ 
-  team, 
-  players, 
+export const TeamTables: React.FC<TeamTableProps> = ({
+  team,
+  teamsLength,
+  players,
   onUpdatePlayerTier,
   onUpdateTeamRank,
-  hideChevron 
+  hideChevron
 }) => {
   const teamPlayers = players.filter(player => player.teamId === team.id);
 
@@ -27,11 +29,12 @@ export const TeamTables: React.FC<TeamTableProps> = ({
   return (
     <div className="m-4">
       <div className="flex items-center mb-4 justify-between">
-          <img src={team.logo} className='w-1/4 h-1/4'></img>
-          <h2 className="text-lg font-bold text-white text-center">{team.name}</h2>
-          <div className="flex items-center space-x-4">
+        <img src={team.logo} className='w-1/4 h-1/4'></img>
+        <h2 className="text-lg font-bold text-white text-center">{team.name}</h2>
+        <div className="flex items-center space-x-4">
           <TeamRankInput
             team={team}
+            teamsLength={teamsLength}
             rank={team.rank}
             onUpdateRank={onUpdateTeamRank}
             hideChevron={hideChevron}
@@ -50,12 +53,10 @@ export const TeamTables: React.FC<TeamTableProps> = ({
 
               const RoleLogo = roleLogos[player.role as keyof typeof roleLogos];
               let playerColor = tierLevel.find(d => d.tier === player.tier)?.color
-              if(!playerColor)
-              {
+              if (!playerColor) {
                 playerColor = "#FFFFFF"
               }
 
-              
               return (
                 <tr key={player.id}>
                   <td className="pl-0 py-2 whitespace-nowrap flex items-center">
@@ -64,18 +65,18 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                   </td>
                   <td className="whitespace-nowrap items-end w-10">
                     <select
-                      className={`items-center text-lg rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : '' } `}
-                      style={{ color: playerColor, direction:"rtl", font:"bold",textAlign:"center"}}
+                      className={`items-center text-lg rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : ''} text-left font-bold`}
+                      style={{ color: playerColor }}
                       value={player.tier}
                       onChange={(e) => onUpdatePlayerTier(player.id, e.target.value)}
                     >
-                      {tierLevel.map((tier,index) => (
-                        <option 
-                          key={index} 
+                      {tierLevel.map((tier, index) => (
+                        <option
+                          key={index}
                           value={tier.tier}
-                          style={{ color: tier.color} }
+                          className={`${tier.color}`}
                         >
-                         {tier.tier}
+                          {tier.tier}
                         </option>
                       ))}
                     </select>

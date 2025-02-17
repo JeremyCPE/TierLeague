@@ -1,123 +1,74 @@
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TeamTables } from './TeamTables';
-import { Player, TeamData} from '../types';
-import {Save} from 'lucide-react'
+import { Player, Team } from '../types';
 import { toPng } from 'html-to-image';
 
-interface TierListInputProps {
+interface TierListProps {
   fullplayers: Player[];
-  fullteams: TeamData[];
-  logo : string
+  fullteams: Team[];
+  logolfl: string;
+  onPlayersChange: (players: Player[]) => void
+  onTeamsChange: (teams: Team[]) => void
 }
 
-export const TierList: React.FC<TierListInputProps> = ({fullplayers, fullteams, logo}) => {
+export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logolfl, onPlayersChange, onTeamsChange }) => {
   const [players, setPlayers] = useState<Player[]>(fullplayers);
-  const [teamRanking, setTeamRanking] = useState<TeamData[]>(fullteams);
-  const [loading, setLoading] = useState(false);
-
-  const tableRef = useRef<HTMLDivElement>(null); 
+  const [teamRanking, setTeamRanking] = useState<Team[]>(fullteams);
 
   useEffect(() => {
     setPlayers(fullplayers);
     setTeamRanking(fullteams);
   }, [fullplayers, fullteams]);
 
-  const saveAsPng = async () => {
-    if (tableRef.current) {
-      setLoading(true);
-      tableRef.current.style.display = "block";
-      const pngDataUrl = await toPng(tableRef.current, { quality: 1.0 });
-      const link = document.createElement('a');
-      link.download = 'my-rank2025';
-      link.href = pngDataUrl;
-      link.click();
-      tableRef.current.style.display = "none";
-      setLoading(false);
-    }
-  }
-
-  const handleUpdatePlayerTier = (playerId: string, tier: string) => {
-    setPlayers(currentPlayers =>
-      currentPlayers.map(player =>
-        player.id === playerId ? { ...player, tier } : player
-      )
-    );
+  const updatePlayerTier = (playerId: string, tier: string) => {
+    const updatedPlayers = players.map(p => (p.id === playerId ? { ...p, tier } : p));
+    setPlayers(updatedPlayers);
+    onPlayersChange(updatedPlayers)
   };
 
-  const handleUpdateTeamRank = (team: TeamData, newRank: number) => {
+  const saveAsPng = async () => {
+    if (tableRef.current) {
+      const pngDataUrl = await toPng(tableRef.current, { quality: 1.0 });
+      const link = document.createElement('a');
+      link.download = 'my-rank2025.png';
+      link.href = pngDataUrl;
+      link.click();
+    }
+  };
 
-    setTeamRanking((currentTeamRanks) => {
-      const oldRank = team.rank;
-  
-      return currentTeamRanks.map((teamRank) => {
-        
-        if (teamRank.id === team.id) {
-          return { ...teamRank, rank: newRank };
-        }
-  
-        if (teamRank.rank === newRank) {
-          return { ...teamRank, rank: oldRank };
-        }  
-        return teamRank;
-      });
-    })}
+  const updateTeamRank = (team: Team, newRank: number) => {
+
+    const updatedTeams = teamRanking.map(t =>
+      t.id === team.id ? { ...t, rank: newRank } : t.rank === newRank ? { ...t, rank: team.rank } : t
+    )
+    setTeamRanking(updatedTeams);
+    onTeamsChange(updatedTeams)
+  };
+
+  const renderRanking = (hideChevron: boolean) => (
+    <div className="grid grid-cols-5 gap-4">
+      {teamRanking.map(team => (
+        <TeamTables
+          key={team.id}
+          team={team}
+          teamsLength={teamRanking.length}
+          players={players}
+          onUpdatePlayerTier={updatePlayerTier}
+          onUpdateTeamRank={updateTeamRank}
+          hideChevron={hideChevron}
+        />
+      ))}
+    </div>
+  );
 
   return (
-    <div className='bg-[#251c0d]'>
-
-    <div ref={tableRef} className='bg-[#251c0d]' style={{ display:"none", width: "1096px", height: "auto" }}>
-    <div className='px-4 py-4 flex items-center'>
-        <img src={logo} alt="Logo" className='w-16' />
-        <h1 className="text-2xl  text-white text-left mt-8 ml-4">
-          Ranking Winter 2025
-        </h1>
+    <div className="bg-[#251c0d]">
+      <div className="px-4 py-4 flex items-center">
+        <img src={logolfl} alt="LFL Logo" className="w-16" />
+        <h1 className="text-2xl text-white ml-4 mt-8">Ranking Winter 2025</h1>
       </div>
-      <div className='grid grid-cols-5 gap-4'>
-        {teamRanking.map(team => (
-          <TeamTables
-            key={team.id}
-            team={team}
-            players={players}
-            onUpdatePlayerTier={handleUpdatePlayerTier}
-            onUpdateTeamRank={handleUpdateTeamRank}
-            hideChevron={true}
-          />
-        ))}
-      </div>
-      <p className="text-gray-400 text-xs text-right">@_RedSeeds  @than_ontweeter</p>  
-    </div>
-
-      <div className=''>
-      
-      <div className='px-4 py-4 flex items-center'>
-        <img src={logo} alt="LFL_Logo" className='w-16' />
-        <h1 className="text-2xl  text-white text-left mt-8 ml-4">
-          Ranking Winter 2025
-        </h1> 
-        </div>
-      <div className='grid md:grid-cols-5 gap-4 mx-auto'>
-          {teamRanking.map(team => (
-            <TeamTables
-              key={team.id}
-              team={team}
-              players={players}
-              onUpdatePlayerTier={handleUpdatePlayerTier}
-              onUpdateTeamRank={handleUpdateTeamRank}
-              hideChevron={false}
-            />
-          ))}
-
-      </div>
-      </div>
-      <div className='flex'>
-            <button onClick={saveAsPng}
-            className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
-                <Save className="w-5 h-5" />
-                Export
-            </button>   
-            {loading && <div className="spinner"></div>}
-      </div>
-      <p className="text-gray-400 text-xs text-right">@_RedSeeds  @than_ontweeter</p>  
+      {renderRanking(false)}
+      <p className="text-gray-400 text-xs text-right">@_RedSeeds @than_ontweeter</p>
     </div>
   );
 };

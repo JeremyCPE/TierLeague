@@ -1,22 +1,16 @@
 import { Tier } from "../types";
 
-const COLORS = {
-  RED: '#ff1b0e',
-  YELLOW: '#ffeb38',
-  GREEN: '#58fd3a',
-  BLUE: '#4b92fd',
-  PURPLE: '#c543fc',
-  WHITE: '#FFFFFF',
-};
-
 export const tierLevel: Tier[] = [
-  { tier: '-', color: COLORS.WHITE },
-  { tier: 'G', color: COLORS.RED },
-  { tier: '+S', color: COLORS.YELLOW },
-  { tier: 'S', color: COLORS.YELLOW },
-  { tier: '+A', color: COLORS.GREEN },
-  { tier: 'A', color: COLORS.GREEN },
-  { tier: '+B', color: COLORS.BLUE },
-  { tier: 'B', color: COLORS.BLUE },
-  { tier: 'C', color: COLORS.PURPLE },
+  { tier: '-', color: 'text-white' },
+  { tier: 'G', color: 'text-red-600' },
+  { tier: 'S+', color: 'text-yellow-400' },
+  { tier: 'S', color: 'text-yellow-300' },
+  { tier: 'S-', color: 'text-yellow-200' },
+  { tier: 'A+', color: 'text-green-400' },
+  { tier: 'A', color: 'text-green-300' },
+  { tier: 'A-', color: 'text-green-200' },
+  { tier: 'B+', color: 'text-blue-400' },
+  { tier: 'B', color: 'text-blue-300' },
+  { tier: 'B-', color: 'text-blue-200' },
+  { tier: 'C', color: 'text-purple-400' },
 ];
