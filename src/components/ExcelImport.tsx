@@ -72,15 +72,12 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
   const handleSheetChange = (sheetName: string, workBookInstance?: WorkBook) => {
     const workbookToUse = workBookInstance || workBook;
     if (!workbookToUse) return;
-    console.log('handleSheetChange');
-
 
     setSelectedSheet(sheetName);
 
     let allPlayers: Player[] = [];
 
     const teams = generateTeams(workbookToUse, sheetName, excelPosition)
-    console.log('teams', teams);
 
 
     teams.forEach((team, index) => {
