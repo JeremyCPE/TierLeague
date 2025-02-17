@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { read } from 'xlsx'
 import type { WorkBook } from "xlsx"
 import { ExcelPosition, Player, Team } from '../types';
@@ -8,11 +8,12 @@ import { Import } from 'lucide-react'
 interface ExcelImportInterface {
   onPlayersChange: (players: Player[]) => void; // 🔹 Correction du nom de la prop
   onTeamsChange: (teams: Team[]) => void
+  onSheetsChange: (sheets: { name: string }[]) => void
 }
 
 
 
-export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, onTeamsChange }) => {
+export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, onTeamsChange, onSheetsChange }) => {
   const [workBook, setWorkBook] = useState<WorkBook | null>(null)
   const [sheets, setSheets] = useState<{ name: string }[]>([])
   const [selectedSheet, setSelectedSheet] = useState(sheets.length > 0 ? sheets[0].name : "")
@@ -51,6 +52,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
       // Transformer les noms des feuilles en objets { name: string }
       const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }));
       setSheets(formattedSheets);
+      onSheetsChange(formattedSheets);
 
       if (formattedSheets.length === 1) {
         // Sélection automatique si une seule feuille
@@ -145,22 +147,6 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
         <Import className='w-6 h-5 px-0 mx-0' />
         Import des joueurs
       </button>
-      <div className="w-[200px] h-[40px] flex items-center">
-        {sheets.length > 1 && (
-          <div className="w-full">
-            <label htmlFor="sheet-select" className='px-1 whitespace-nowrap'> Page </label>
-            <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className={`text-black w-full px-1 ${sheets.length > 1 ? "visible" : "invisible"}`}>
-              <option value="">-- Sélectionner une feuille --</option>
-              {sheets.map((sheet) => (
-                <option key={sheet.name} value={sheet.name}>
-                  {sheet.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      </div>
     </div>
-
   )
 }
