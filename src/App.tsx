@@ -9,8 +9,8 @@ function App() {
   const [players, setPlayers] = useState<Player[]>([])
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(false)
-  const [sheets, setSheets] = useState<{ name: string }[]>([]);
-  const [selectedSheet, setSelectedSheet] = useState<string>("");
+  const [sheets, setSheets] = useState<{ name: string }[]>([])
+  const [selectedSheet, setSelectedSheet] = useState<string>("")
 
   const handleOnPlayersChange = (updatedPlayers: Player[]): void => {
     setPlayers(updatedPlayers)
@@ -20,23 +20,20 @@ function App() {
     setTeams(updatedTeams)
   }
 
-  const handleOnSheetsChange = (sheetsList: { name: string }[]) => {
-    setSheets(sheetsList);
-    if (sheetsList.length === 1) {
-      setSelectedSheet(sheetsList[0].name);
-    } else {
-      setSelectedSheet("");
-    }
-  }
-
   const handleSheetSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSheet(event.target.value);
+    const sheetName = event.target.value
+    setSelectedSheet(sheetName)
+
   }
 
-  const test = () => {
-    console.log('test', players);
-    console.log('test2', teams);
-
+  const handleOnSheetsChange = (sheetsList: { name: string }[]) => {
+    setSheets(sheetsList)
+    if (sheetsList.length === 1) {
+      setSelectedSheet(sheetsList[0].name)
+    } else {
+      // On réinitialise le choix à vide pour laisser l'utilisateur choisir quelle feuille il veut afficher
+      setSelectedSheet("")
+    }
   }
 
   //TODO
@@ -48,7 +45,7 @@ function App() {
         <nav className="bg-black/50 backdrop-blur-sm border-b border-[#251c0d]/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
-              <ExcelImport onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} onSheetsChange={handleOnSheetsChange} />
+              <ExcelImport onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} onSheetsChange={handleOnSheetsChange} selectedSheet={selectedSheet} />
               {/* <button onClick={test}>test</button> */}
               <div className="flex flex-1 justify-center space-x-8 px-0 mx-0">
                 <div className="w-[200px] h-[40px] flex items-center">
@@ -87,7 +84,7 @@ function App() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
