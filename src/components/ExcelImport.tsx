@@ -37,7 +37,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
       fileInputRef.current.click()
     }
   }
-  const importPlayers = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
 
@@ -141,7 +141,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
 
   return (
     <div className='flex flex-1 justify-start text-white items-center space-x-1'>
-      <input type="file" accept=".xls, .xlsx" id="file" ref={fileInputRef} onChange={e => importPlayers(e)} className='hidden' />
+      <input type="file" accept=".xls, .xlsx" id="file" ref={fileInputRef} onChange={e => importFromExcel(e)} className='hidden' />
       <button onClick={handleButtonClick} className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
         <Import className='w-6 h-5 px-0 mx-0' />
         Import des joueurs

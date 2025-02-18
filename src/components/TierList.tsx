@@ -63,12 +63,12 @@ export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo
 
   return (
     <div className="bg-[#251c0d]">
-      <div className="px-4 py-4 flex items-center">
+      <div className="px-4 py-4 flex items-center w-25">
         {logo && <img src={logo} alt="Competition Logo" className="w-16" />}
-        <h1 className="text-2xl text-white ml-4 mt-8">Ranking Winter 2025</h1>
+        <h1 className="text-2xl text-white ml-4 mt-8">Ranking Teams </h1>
       </div>
       {renderRanking(false)}
-      <p className="text-gray-400 text-xs text-right">@_RedSeeds @than_ontweeter @VongoSanDi</p>
+      <p className="text-gray-400 text-xs text-center w-46">@_RedSeeds @than_ontweeter @VongoSanDi</p>
     </div>
   )
 }
