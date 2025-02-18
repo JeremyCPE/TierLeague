@@ -1,7 +1,8 @@
 import { TierList } from './components/TierList'
 import { ExcelImport } from './components/ExcelImport'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LFLLogo from './assets/lfl_logo.png'
+import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
 import { Save } from 'lucide-react'
 
@@ -11,6 +12,15 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [sheets, setSheets] = useState<{ name: string }[]>([])
   const [selectedSheet, setSelectedSheet] = useState<string>("")
+  const [logo, setLogo] = useState("")
+
+  useEffect(() => {
+    if (selectedSheet.includes('LEC')) {
+      setLogo(LECLogo)
+    } else if (selectedSheet.includes('LFL')) {
+      setLogo(LFLLogo)
+    }
+  }, [selectedSheet])
 
   const handleOnPlayersChange = (updatedPlayers: Player[]): void => {
     setPlayers(updatedPlayers)
@@ -51,11 +61,11 @@ function App() {
                 <div className="w-[200px] h-[40px] flex items-center">
                   {sheets.length > 0 && (
                     <div className="w-full">
-                      <label htmlFor="sheet-select" className='px-1 whitespace-nowrap'> Page </label>
-                      <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className="text-black w-full px-1">
-                        <option value="">-- Sélectionner une feuille --</option>
+                      {/* <label htmlFor="sheet-select" className='px-1 whitespace-nowrap'> Page </label> */}
+                      <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className="bg-[#251c0d] border text-white px-4 py-3 rounded-full hover:bg-[#15100c] transition-colors w-full text-left">
+                        <option value="" className='bg-black text-left'>-- Sélectionner une feuille --</option>
                         {sheets.map((sheet) => (
-                          <option key={sheet.name} value={sheet.name}>
+                          <option key={sheet.name} value={sheet.name} className='bg-black'>
                             {sheet.name}
                           </option>
                         ))}
@@ -80,7 +90,7 @@ function App() {
 
       <div className="min-h-screen bg-black flex py-8 px-4 overflow-hidden">
         <div className='max-w-6xl mx-auto'>
-          <TierList fullteams={teams} fullplayers={players} logolfl={LFLLogo} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
+          <TierList fullteams={teams} fullplayers={players} {...(logo ? { logo } : {})} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
         </div>
       </div>
     </>

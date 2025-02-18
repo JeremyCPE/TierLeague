@@ -6,12 +6,12 @@ import { toPng } from 'html-to-image'
 interface TierListProps {
   fullplayers: Player[]
   fullteams: Team[]
-  logolfl: string
+  logo?: string
   onPlayersChange: (players: Player[]) => void
   onTeamsChange: (teams: Team[]) => void
 }
 
-export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logolfl, onPlayersChange, onTeamsChange }) => {
+export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo, onPlayersChange, onTeamsChange }) => {
   const [players, setPlayers] = useState<Player[]>(fullplayers)
   const [teamRanking, setTeamRanking] = useState<Team[]>(fullteams)
 
@@ -64,11 +64,11 @@ export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo
   return (
     <div className="bg-[#251c0d]">
       <div className="px-4 py-4 flex items-center">
-        <img src={logolfl} alt="LFL Logo" className="w-16" />
+        {logo && <img src={logo} alt="Competition Logo" className="w-16" />}
         <h1 className="text-2xl text-white ml-4 mt-8">Ranking Winter 2025</h1>
       </div>
       {renderRanking(false)}
-      <p className="text-gray-400 text-xs text-right">@_RedSeeds @than_ontweeter</p>
+      <p className="text-gray-400 text-xs text-right">@_RedSeeds @than_ontweeter @VongoSanDi</p>
     </div>
   )
 }
