@@ -4,7 +4,6 @@ export interface Player {
   name: string;
   teamId: number;
   teamName: string;
-  logo: string;
   role: string;
   tier: string;
   tierAddress: string;

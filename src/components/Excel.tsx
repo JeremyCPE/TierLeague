@@ -96,7 +96,8 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
         name: teamName,
         rank: parseInt(teamRank),
         rankAddress: cellAdressRank,
-        logo: `https://raw.githubusercontent.com/VongoSanDi/tier-list-lol/main/${teamName}.png`
+        // logo: `https://raw.githubusercontent.com/VongoSanDi/tier-list-lol/main/${teamName}.png`
+        logo: `https://github.com/JeremyCPE/LFLTierList/blob/main/src/assets/${teamName}.png`
       })
     }
     return teams
@@ -118,7 +119,6 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
         name: playerName,
         teamId: teamId,
         teamName: teamName,
-        logo: `/logos/${teamName.toLowerCase()}.png`,
         role: roles[i],
         tier: playerTier ? playerTier.toString() : "",
         tierAddress: tierAddress
