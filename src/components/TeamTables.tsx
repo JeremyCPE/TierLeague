@@ -1,7 +1,6 @@
 import React from 'react';
-import { Player, } from '../types';
+import { Player, Tier, } from '../types';
 import { roleLogos } from '../data/roles';
-import { tierLevel } from '../data/tiers';
 import { TeamRankInput } from './TeamRankInput';
 import { Team } from '../types';
 
@@ -22,9 +21,26 @@ export const TeamTables: React.FC<TeamTableProps> = ({
   onUpdateTeamRank,
   hideChevron
 }) => {
+  const tierLevel: Tier[] = [
+    { tier: '-', color: 'text-white' },
+    { tier: 'G', color: 'text-red-600' },
+    { tier: 'S+', color: 'text-yellow-400' },
+    { tier: 'S', color: 'text-yellow-300' },
+    { tier: 'S-', color: 'text-yellow-200' },
+    { tier: 'A+', color: 'text-green-400' },
+    { tier: 'A', color: 'text-green-300' },
+    { tier: 'A-', color: 'text-green-200' },
+    { tier: 'B+', color: 'text-blue-400' },
+    { tier: 'B', color: 'text-blue-300' },
+    { tier: 'B-', color: 'text-blue-200' },
+    { tier: 'C', color: 'text-purple-400' },
+  ];
+
+
   const teamPlayers = players.filter(player => player.teamId === team.id);
 
   if (teamPlayers.length === 0) return null;
+
 
   return (
     <div className="m-4">
@@ -53,8 +69,9 @@ export const TeamTables: React.FC<TeamTableProps> = ({
 
               const RoleLogo = roleLogos[player.role as keyof typeof roleLogos];
               let playerColor = tierLevel.find(d => d.tier === player.tier)?.color
+
               if (!playerColor) {
-                playerColor = "#FFFFFF"
+                playerColor = "text-white"
               }
 
               return (
@@ -65,8 +82,7 @@ export const TeamTables: React.FC<TeamTableProps> = ({
                   </td>
                   <td className="whitespace-nowrap items-end w-10">
                     <select
-                      className={`items-center text-lg rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : ''} text-left font-bold`}
-                      style={{ color: playerColor }}
+                      className={`items-center text-lg rounded-lg bg-[#251c0d] hover:bg-[#15100c] ${hideChevron ? 'appearance-none' : ''} text-left font-bold ${playerColor}`}
                       value={player.tier}
                       onChange={(e) => onUpdatePlayerTier(player.id, e.target.value)}
                     >
