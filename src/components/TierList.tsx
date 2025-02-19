@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TeamTables } from './TeamTables'
 import { Player, Team } from '../types'
-import { toPng } from 'html-to-image'
 
 interface TierListProps {
   fullplayers: Player[]
@@ -24,16 +23,6 @@ export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo
     const updatedPlayers = players.map(p => (p.id === playerId ? { ...p, tier } : p))
     setPlayers(updatedPlayers)
     onPlayersChange(updatedPlayers)
-  }
-
-  const saveAsPng = async () => {
-    if (tableRef.current) {
-      const pngDataUrl = await toPng(tableRef.current, { quality: 1.0 })
-      const link = document.createElement('a')
-      link.download = 'my-rank2025.png'
-      link.href = pngDataUrl
-      link.click()
-    }
   }
 
   const updateTeamRank = (team: Team, newRank: number) => {

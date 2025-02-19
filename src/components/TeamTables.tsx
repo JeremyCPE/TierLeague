@@ -36,11 +36,9 @@ export const TeamTables: React.FC<TeamTableProps> = ({
     { tier: 'C', color: 'text-purple-400' },
   ];
 
-
   const teamPlayers = players.filter(player => player.teamId === team.id);
 
   if (teamPlayers.length === 0) return null;
-
 
   return (
     <div className="m-4">
