@@ -4,33 +4,21 @@ import type { WorkBook } from "xlsx"
 import { ExcelPosition, Player, Team } from '../types'
 import { v4 as uuidv4 } from 'uuid'
 import { Import } from 'lucide-react'
+import { excelPosition } from '../data/excel.data'
+import { roles } from '../data/common.data'
 
-interface ExcelImportInterface {
+interface ExcelInterface {
   onPlayersChange: (players: Player[]) => void
   onTeamsChange: (teams: Team[]) => void
+  onWorkbookChange: (workbook: WorkBook) => void
   onSheetsChange: (sheets: { name: string }[]) => void
   selectedSheet: string
 }
 
-export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, onTeamsChange, onSheetsChange, selectedSheet }) => {
+export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange, onWorkbookChange, onSheetsChange, selectedSheet }) => {
   const [workBook, setWorkBook] = useState<WorkBook | null>(null)
 
-
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-
-  const roles = ["Toplaner", "Jungle", "Midlaner", "Botlaner", "Support"]
-  const excelPosition: ExcelPosition[] = [
-    { columnTeam: "B", columnRank: 'C', startRow: 1 },
-    { columnTeam: "E", columnRank: 'F', startRow: 1 },
-    { columnTeam: "H", columnRank: 'I', startRow: 1 },
-    { columnTeam: "K", columnRank: 'L', startRow: 1 },
-    { columnTeam: "N", columnRank: 'O', startRow: 1 },
-    { columnTeam: "B", columnRank: 'C', startRow: 8 },
-    { columnTeam: "E", columnRank: 'F', startRow: 8 },
-    { columnTeam: "H", columnRank: 'I', startRow: 8 },
-    { columnTeam: "K", columnRank: 'L', startRow: 8 },
-    { columnTeam: "N", columnRank: 'O', startRow: 8 },
-  ]
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -48,6 +36,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
       const workbook = read(data, { type: 'array' })
 
       setWorkBook(workbook)
+      onWorkbookChange(workbook)
 
       // Transformer les noms des feuilles en objets { name: string }
       const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }))
@@ -73,7 +62,7 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
     const teams = generateTeams(workBook, sheetName, excelPosition)
 
     teams.forEach((team, index) => {
-      const teamPlayers = generatePlayers(workBook, sheetName, excelPosition[index].columnTeam, excelPosition[index].startRow + 1, team)
+      const teamPlayers = generatePlayers(workBook, sheetName, excelPosition, index, team)
       allPlayers = [...allPlayers, ...teamPlayers]
     })
 
@@ -102,19 +91,22 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
         id: i,
         name: teamName,
         rank: parseInt(teamRank),
+        rankAddress: cellAdressRank,
         logo: `https://raw.githubusercontent.com/VongoSanDi/tier-list-lol/main/${teamName}.png`
       })
     }
     return teams
   }
 
-  const generatePlayers = (workbook: WorkBook, sheetName: string, column: string, startRow: number, team: Team): Player[] => {
+  const generatePlayers = (workbook: WorkBook, sheetName: string, excelData: ExcelPosition, index: number, team: Team): Player[] => {
     const players: Player[] = []
     for (let i = 0; i < roles.length; i++) {
-      const cellAddress = `${column}${startRow + i}`
+      const cellAddress = `${excelPosition[index].columnTeam}${excelPosition[index].startRow + 1 + i}`
       const teamName = team.name
       const teamId = team.id
       const playerName = readCell(workbook, sheetName, cellAddress)
+      const tierAddress = `${excelPosition[index].columnRank}${excelPosition[index].startRow + 1 + i}`
+      const playerTier = readCell(workbook, sheetName, tierAddress)
       if (!playerName) continue // Ignorer les cellules vides
 
       players.push({
@@ -124,7 +116,8 @@ export const ExcelImport: React.FC<ExcelImportInterface> = ({ onPlayersChange, o
         teamName: teamName,
         logo: `/logos/${teamName.toLowerCase()}.png`,
         role: roles[i],
-        tier: "",
+        tier: playerTier ? playerTier.toString() : "",
+        tierAddress: tierAddress
       })
     }
     return players

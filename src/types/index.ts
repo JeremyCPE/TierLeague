@@ -7,12 +7,14 @@ export interface Player {
   logo: string;
   role: string;
   tier: string;
+  tierAddress: string;
 }
 
 export interface Team {
   id: number;
   name: string;
   rank: number;
+  rankAddress: string;
   logo: string;
 }
 
