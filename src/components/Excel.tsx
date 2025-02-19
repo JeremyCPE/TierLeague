@@ -141,7 +141,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       <input type="file" accept=".xls, .xlsx" id="file" ref={fileInputRef} onChange={e => importFromExcel(e)} className='hidden' />
       <button onClick={handleButtonClick} className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
         <Import className='w-6 h-5 px-0 mx-0' />
-        Import des joueurs
+        Import des joueurs depuis excel
       </button>
     </div>
   )

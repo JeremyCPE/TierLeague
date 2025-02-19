@@ -108,7 +108,7 @@ function App() {
                 <button onClick={exportToExcel}
                   className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
                   <Save className="w-5 h-5" />
-                  Export
+                  Export vers excel
                 </button>
                 {loading && <div className="spinner"></div>}
               </div>
