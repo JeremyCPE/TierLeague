@@ -12,6 +12,7 @@ function App() {
   const [teams, setTeams] = useState<Team[]>([])
   const [loading, setLoading] = useState(false)
   const [workbook, setWorkbook] = useState<WorkBook | null>(null)
+  const [fileName, setFileName] = useState("")
   const [sheets, setSheets] = useState<{ name: string }[]>([])
   const [selectedSheet, setSelectedSheet] = useState<string>("")
   const [logo, setLogo] = useState("")
@@ -32,8 +33,9 @@ function App() {
     setTeams(updatedTeams)
   }
 
-  const handleOnWorkbookChange = (workbook: WorkBook) => {
+  const handleOnWorkbookChange = (workbook: WorkBook, fileName: string) => {
     setWorkbook(workbook)
+    setFileName(fileName)
   }
 
   const handleSheetSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -52,6 +54,10 @@ function App() {
     }
   }
 
+  const handleLoading = (updateLoading: boolean) => {
+    setLoading(updateLoading)
+  }
+
   const exportToExcel = () => {
     if (!workbook) return
 
@@ -66,7 +72,7 @@ function App() {
     })
 
     // Sauvegarde du fichier mis à jour
-    writeFile(workbook, "TierList_Modifié.xlsx", { bookType: "xlsx", type: "file" })
+    writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" })
   }
 
   return (
@@ -75,7 +81,13 @@ function App() {
         <nav className="bg-black/50 backdrop-blur-sm border-b border-[#251c0d]/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
-              <Excel onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} onWorkbookChange={handleOnWorkbookChange} onSheetsChange={handleOnSheetsChange} selectedSheet={selectedSheet} />
+              <Excel
+                onPlayersChange={handleOnPlayersChange}
+                onTeamsChange={handleOnTeamsChange}
+                onWorkbookChange={handleOnWorkbookChange}
+                onSheetsChange={handleOnSheetsChange}
+                selectedSheet={selectedSheet}
+                onLoading={handleLoading} />
               <div className="flex flex-1 justify-center space-x-8 px-0 mx-0">
                 <div className="w-[200px] h-[40px] flex items-center">
                   {sheets.length > 0 && (

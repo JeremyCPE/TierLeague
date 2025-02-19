@@ -10,24 +10,28 @@ import { roles } from '../data/common.data'
 interface ExcelInterface {
   onPlayersChange: (players: Player[]) => void
   onTeamsChange: (teams: Team[]) => void
-  onWorkbookChange: (workbook: WorkBook) => void
+  onWorkbookChange: (workbook: WorkBook, fileName: string) => void
   onSheetsChange: (sheets: { name: string }[]) => void
+  onLoading: (loading: boolean) => void
   selectedSheet: string
 }
 
-export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange, onWorkbookChange, onSheetsChange, selectedSheet }) => {
+export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange, onWorkbookChange, onSheetsChange, selectedSheet, onLoading }) => {
   const [workBook, setWorkBook] = useState<WorkBook | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  // Permet lorsqu'on clique sur le bouton pour importer de faire comme si on cliquait sur le input
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click()
     }
   }
   const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onLoading(true)
     const file = event.target.files?.[0]
     if (!file) return
+    const fileName = file.name
 
     const reader = new FileReader()
     reader.readAsArrayBuffer(file)
@@ -36,7 +40,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       const workbook = read(data, { type: 'array' })
 
       setWorkBook(workbook)
-      onWorkbookChange(workbook)
+      onWorkbookChange(workbook, fileName)
 
       // Transformer les noms des feuilles en objets { name: string }
       const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }))
@@ -48,13 +52,11 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
           handleSheetChange(formattedSheets[0].name)
         }, 0)
       }
-
     }
+    onLoading(false)
   }
 
   const handleSheetChange = (sheetName: string) => {
-    console.log('handleSheetChange', sheetName)
-
     if (!workBook) return
 
     let allPlayers: Player[] = []
@@ -62,7 +64,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
     const teams = generateTeams(workBook, sheetName, excelPosition)
 
     teams.forEach((team, index) => {
-      const teamPlayers = generatePlayers(workBook, sheetName, excelPosition, index, team)
+      const teamPlayers = generatePlayers(workBook, sheetName, index, team)
       allPlayers = [...allPlayers, ...teamPlayers]
     })
 
@@ -70,10 +72,12 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
     onTeamsChange(teams)
   }
 
+  // Permet de charger automatiquement les données après avoir sélectionner un document à charger
   useEffect(() => {
     if (workBook && selectedSheet) {
-      console.log(`📄 Chargement des données pour la feuille: ${selectedSheet}`)
+      onLoading(true)
       handleSheetChange(selectedSheet)
+      onLoading(false)
     }
   }, [workBook, selectedSheet])
 
@@ -98,7 +102,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
     return teams
   }
 
-  const generatePlayers = (workbook: WorkBook, sheetName: string, excelData: ExcelPosition, index: number, team: Team): Player[] => {
+  const generatePlayers = (workbook: WorkBook, sheetName: string, index: number, team: Team): Player[] => {
     const players: Player[] = []
     for (let i = 0; i < roles.length; i++) {
       const cellAddress = `${excelPosition[index].columnTeam}${excelPosition[index].startRow + 1 + i}`
