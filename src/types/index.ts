@@ -1,19 +1,30 @@
+
 export interface Player {
   id: string;
   name: string;
   teamId: number;
+  teamName: string;
   role: string;
-  tier: string
+  tier: string;
+  tierAddress: string;
 }
 
-export interface TeamData {
-  id : number;
+export interface Team {
+  id: number;
   name: string;
   rank: number;
-  logo : string;
+  rankAddress: string;
+  logo: string;
 }
 
 export interface Tier {
-    tier : string;
-    color : string;
+  tier: string;
+  color: string;
+}
+
+
+export interface ExcelPosition {
+  columnTeam: string;
+  columnRank: string;
+  startRow: number;
 }
