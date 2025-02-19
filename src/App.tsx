@@ -86,6 +86,7 @@ function App() {
     if (!workbook) return
 
     const worksheet = workbook.Sheets[selectedSheet]
+    if (!worksheet) return
 
     teams.forEach((team) => {
       worksheet[team.rankAddress] = { v: team.rank }
@@ -95,30 +96,27 @@ function App() {
       })
     })
     // Sauvegarde du fichier mis à jour
-    await new Promise<void>((resolve) => {
-      writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" });
-      setTimeout(resolve, 1000); // Petite pause pour s'assurer que la sauvegarde est terminée
-    });
-    await exportToPng()
-
+    writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" });
   }
 
   const exportToPng = async () => {
-    console.log('exportToPng', tierListRef);
+    if (!workbook) return
+    const worksheet = workbook.Sheets[selectedSheet]
+    if (!worksheet) return
+
     if (tierListRef.current) {
+      const originalDisplay = tierListRef.current.style.display
       tierListRef.current.style.display = "block";
       const pngDataUrl = await toPng(tierListRef.current, {
         quality: 1.0,
         skipFonts: true // Évite les erreurs de lecture des CSS distants
       });
-      const link = document.createElement('a');
-      link.download = 'my-lflrank2025';
-      link.href = pngDataUrl;
-      link.click();
-      tierListRef.current.style.display = "none";
+      const link = document.createElement('a')
+      link.download = 'my-lflrank2025'
+      link.href = pngDataUrl
+      link.click()
+      tierListRef.current.style.display = originalDisplay
     }
-    console.log('exportToPng done');
-
   }
 
   return (
