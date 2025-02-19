@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 import { TeamTables } from './TeamTables'
 import { Player, Team } from '../types'
 
@@ -10,7 +10,7 @@ interface TierListProps {
   onTeamsChange: (teams: Team[]) => void
 }
 
-export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo, onPlayersChange, onTeamsChange }) => {
+export const TierList = forwardRef<HTMLDivElement, TierListProps>(({ fullplayers, fullteams, logo, onPlayersChange, onTeamsChange }, ref) => {
   const [players, setPlayers] = useState<Player[]>(fullplayers)
   const [teamRanking, setTeamRanking] = useState<Team[]>(fullteams)
 
@@ -51,7 +51,7 @@ export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo
   )
 
   return (
-    <div className="bg-[#251c0d]">
+    <div ref={ref} className="bg-[#251c0d]">
       <div className="px-4 py-4 flex items-center w-25">
         {logo && <img src={logo} alt="Competition Logo" className="w-16" />}
         <h1 className="text-2xl text-white ml-4 mt-8">Ranking Teams </h1>
@@ -61,3 +61,4 @@ export const TierList: React.FC<TierListProps> = ({ fullplayers, fullteams, logo
     </div>
   )
 }
+)

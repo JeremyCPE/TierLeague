@@ -1,11 +1,12 @@
 import { TierList } from './components/TierList'
 import { Excel } from './components/Excel'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LFLLogo from './assets/lfl_logo.png'
 import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
-import { Save } from 'lucide-react'
+import { Save, FileImage, FileSpreadsheet } from 'lucide-react'
 import { WorkBook, writeFile } from 'xlsx'
+import { toPng } from 'html-to-image'
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([])
@@ -16,6 +17,29 @@ function App() {
   const [sheets, setSheets] = useState<{ name: string }[]>([])
   const [selectedSheet, setSelectedSheet] = useState<string>("")
   const [logo, setLogo] = useState("")
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const tierListRef = useRef<HTMLDivElement>(null);
+
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+  // Ferme le menu si on clique ailleurs
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   useEffect(() => {
     if (selectedSheet.includes('LEC')) {
@@ -58,7 +82,7 @@ function App() {
     setLoading(updateLoading)
   }
 
-  const exportToExcel = () => {
+  const exportToExcel = async () => {
     if (!workbook) return
 
     const worksheet = workbook.Sheets[selectedSheet]
@@ -70,9 +94,31 @@ function App() {
         worksheet[player.tierAddress] = { v: player.tier }
       })
     })
-
     // Sauvegarde du fichier mis à jour
-    writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" })
+    await new Promise<void>((resolve) => {
+      writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" });
+      setTimeout(resolve, 1000); // Petite pause pour s'assurer que la sauvegarde est terminée
+    });
+    await exportToPng()
+
+  }
+
+  const exportToPng = async () => {
+    console.log('exportToPng', tierListRef);
+    if (tierListRef.current) {
+      tierListRef.current.style.display = "block";
+      const pngDataUrl = await toPng(tierListRef.current, {
+        quality: 1.0,
+        skipFonts: true // Évite les erreurs de lecture des CSS distants
+      });
+      const link = document.createElement('a');
+      link.download = 'my-lflrank2025';
+      link.href = pngDataUrl;
+      link.click();
+      tierListRef.current.style.display = "none";
+    }
+    console.log('exportToPng done');
+
   }
 
   return (
@@ -104,12 +150,26 @@ function App() {
                   )}
                 </div>
               </div>
-              <div className='flex flex-1 justify-end text-white'>
-                <button onClick={exportToExcel}
+              <div className='flex flex-1 justify-end text-white' ref={dropdownRef}>
+                <button onClick={toggleDropdown}
                   className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
                   <Save className="w-5 h-5" />
                   Export vers excel
                 </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-[#15100c] border border-[#251c0d] rounded-md shadow-lg z-50">
+                    <button onClick={() => { setIsDropdownOpen(false); exportToExcel(); }}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-[#251c0d] transition">
+                      <FileSpreadsheet className="w-4 h-4 inline-block mr-2" />
+                      Export Excel
+                    </button>
+                    <button onClick={() => { setIsDropdownOpen(false); exportToPng(); }}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-[#251c0d] transition">
+                      <FileImage className="w-4 h-4 inline-block mr-2" />
+                      Export PNG
+                    </button>
+                  </div>
+                )}
                 {loading && <div className="spinner"></div>}
               </div>
 
@@ -120,7 +180,7 @@ function App() {
 
       <div className="min-h-screen bg-black flex py-8 px-4 overflow-hidden">
         <div className='max-w-6xl mx-auto'>
-          <TierList fullteams={teams} fullplayers={players} {...(logo ? { logo } : {})} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
+          <TierList ref={tierListRef} fullteams={teams} fullplayers={players} {...(logo ? { logo } : {})} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
         </div>
       </div>
     </>
