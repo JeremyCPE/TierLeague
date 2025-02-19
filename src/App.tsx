@@ -6,8 +6,6 @@ import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
 import { Save } from 'lucide-react'
 import { WorkBook, writeFile } from 'xlsx'
-import { excelPosition } from './data/excel.data'
-import { roles } from './data/common.data'
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([])
@@ -55,9 +53,6 @@ function App() {
   }
 
   const exportToExcel = () => {
-    console.log('export1', teams);
-    console.log('export1', teams);
-
     if (!workbook) return
 
     const worksheet = workbook.Sheets[selectedSheet]
@@ -85,7 +80,7 @@ function App() {
                 <div className="w-[200px] h-[40px] flex items-center">
                   {sheets.length > 0 && (
                     <div className="w-full">
-                      <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className="bg-[#251c0d] border text-white px-4 py-3 rounded-full hover:bg-[#15100c] transition-colors w-full text-left">
+                      <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className="bg-[#251c0d] border text-white w-fit px-4 py-3 rounded-full hover:bg-[#15100c] transition-colors text-center">
                         <option value="" className='bg-black text-left'>-- Sélectionner une feuille --</option>
                         {sheets.map((sheet) => (
                           <option key={sheet.name} value={sheet.name} className='bg-black'>
