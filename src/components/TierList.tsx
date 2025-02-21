@@ -13,6 +13,16 @@ interface TierListProps {
 export const TierList = forwardRef<HTMLDivElement, TierListProps>(({ fullplayers, fullteams, logo, onPlayersChange, onTeamsChange }, ref) => {
   const [players, setPlayers] = useState<Player[]>(fullplayers)
   const [teamRanking, setTeamRanking] = useState<Team[]>(fullteams)
+  const [isVisible, setIsVisible] = useState(true)
+
+  // On check si on affiche le tuto ou pas
+  useEffect(() => {
+    if (players.length === 0) {
+      setIsVisible(true)
+    } else {
+      setIsVisible(false)
+    }
+  }, [players, setIsVisible])
 
   useEffect(() => {
     setPlayers(fullplayers)
@@ -57,6 +67,7 @@ export const TierList = forwardRef<HTMLDivElement, TierListProps>(({ fullplayers
         <h1 className="text-2xl text-white ml-4 mt-8">Ranking Teams </h1>
       </div>
       {renderRanking(false)}
+      {isVisible && <div className='text-white'></div>}
       <p className="text-gray-400 text-xs text-center w-46">@_RedSeeds @than_ontweeter @VongoSanDi</p>
     </div>
   )
