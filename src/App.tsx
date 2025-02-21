@@ -4,10 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import LFLLogo from './assets/lfl_logo.png'
 import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
-import { FileImage, FileSpreadsheet, Upload } from 'lucide-react'
-import { WorkBook, writeFile, read,  } from 'xlsx'
+import { WorkBook, } from 'xlsx'
 import { WelcomeSection } from './components/WelcomeSection'
-import { toPng } from 'html-to-image'
 import { ExportButtons } from './components/ExportButtons'
 
 function App() {
@@ -23,7 +21,6 @@ function App() {
 
   const tierListRef = useRef<HTMLDivElement>(null);
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   // Ferme le menu si on clique ailleurs que sur les boutons de choix
   const dropdownRef = useRef<HTMLDivElement>(null);
