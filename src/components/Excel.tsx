@@ -97,7 +97,6 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
         name: teamName,
         rank: parseInt(teamRank),
         rankAddress: cellAdressRank,
-        // logo: `https://github.com/JeremyCPE/LFLTierList/blob/main/src/assets/${teamName}.png`
         logo: teamLogos[teamName] || ""
       })
     }
