@@ -7,9 +7,9 @@ export const WelcomeSection: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isVisible && (
-        <section className="absolute bottom-16 right-0 bg-gradient-to-br from-[#2a1f10] to-[#1a130a] border border-[#3d2d17] rounded-lg p-8 text-white max-w-xl mb-4 shadow-xl">
-          <h2 className="text-2xl font-semibold mb-4 text-amber-200">Guide rapide</h2>
-          <ul className="space-y-4 pl-6 list-disc text-lg text-gray-200">
+        <section className="absolute bottom-16 right-0 bg-gradient-to-br from-[#2a1f10] to-[#1a130a] border border-[#3d2d17] rounded-lg p-8 text-white max-w-3xl min-h-[300px] mb-4 shadow-xl">
+          <h2 className="text-2xl font-semibold mb-6 text-amber-200">Guide rapide</h2>
+          <ul className="space-y-6 pl-6 list-disc text-xl text-gray-200">
             <li>
               Téléchargez le{' '}
               <a 
@@ -24,10 +24,10 @@ export const WelcomeSection: React.FC = () => {
               Sélectionnez une feuille de travail si nécessaire
             </li>
             <li>
-              Modifiez vos classements par glisser-déposer
+              Modifiez vos classements
             </li>
             <li>
-              Exportez en format xlsx ou png
+              Et exportez en format xlsx ou png !
             </li>
           </ul>
         </section>
