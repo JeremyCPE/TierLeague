@@ -3,7 +3,7 @@ import { read } from 'xlsx'
 import type { WorkBook } from "xlsx"
 import { ExcelPosition, Player, Team } from '../types'
 import { v4 as uuidv4 } from 'uuid'
-import { Import } from 'lucide-react'
+import { Upload } from 'lucide-react'
 import { excelPosition } from '../data/excel.data'
 import { roles } from '../data/common.data'
 import { teamLogos } from '../data/logo.data'
@@ -140,9 +140,11 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
   return (
     <div className='flex flex-1 justify-start text-white items-center space-x-1'>
       <input type="file" accept=".xls, .xlsx" id="file" ref={fileInputRef} onChange={e => importFromExcel(e)} className='hidden' />
-      <button onClick={handleButtonClick} className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
-        <Import className='w-6 h-5 px-0 mx-0' />
-        Import des joueurs depuis excel
+      <button onClick={handleButtonClick} className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors md:space-x-2">
+        <Upload className='w-6 h-5 px-0 mx-0' />
+        <span className='hidden md:inline'>
+          Import des joueurs depuis excel
+        </span>
       </button>
     </div>
   )

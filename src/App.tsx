@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import LFLLogo from './assets/lfl_logo.png'
 import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
-import { Save, FileImage, FileSpreadsheet } from 'lucide-react'
+import { FileImage, FileSpreadsheet, Upload } from 'lucide-react'
 import { WorkBook, writeFile } from 'xlsx'
 import { toPng } from 'html-to-image'
 
@@ -23,7 +23,7 @@ function App() {
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  // Ferme le menu si on clique ailleurs
+  // Ferme le menu si on clique ailleurs que sur les boutons de choix
   const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -150,9 +150,11 @@ function App() {
               </div>
               <div className='flex flex-1 justify-end text-white' ref={dropdownRef}>
                 <button onClick={toggleDropdown}
-                  className="bg-[#251c0d] border text-white px-8 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors">
-                  <Save className="w-5 h-5" />
-                  Export vers excel
+                  className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors md:space-x-2">
+                  <Upload className="w-5 h-5" />
+                  <span className='hidden md:inline'>
+                    Export vers ...
+                  </span>
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-[#15100c] border border-[#251c0d] rounded-md shadow-lg z-50">
