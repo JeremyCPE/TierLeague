@@ -110,7 +110,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       const cellAddress = `${excelPosition[index].columnTeam}${excelPosition[index].startRow + 1 + i}`
       const teamName = team.name
       const teamId = team.id
-      const playerName = readCell(workbook, sheetName, cellAddress)
+      const playerName = readCell(workbook, sheetName, cellAddress)?.toString()
       const tierAddress = `${excelPosition[index].columnRank}${excelPosition[index].startRow + 1 + i}`
       const playerTier = readCell(workbook, sheetName, tierAddress)
       if (!playerName) continue // Ignorer les cellules vides
