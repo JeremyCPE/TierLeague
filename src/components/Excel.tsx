@@ -80,7 +80,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       handleSheetChange(selectedSheet)
       onLoading(false)
     }
-  }, [workBook, selectedSheet, onLoading])
+  }, [workBook, selectedSheet])
 
 
 
