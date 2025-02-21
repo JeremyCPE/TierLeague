@@ -79,7 +79,10 @@ export const TierList = forwardRef<HTMLDivElement, TierListProps>(({ fullplayers
           <li>
             Une fois le document importé, si votre document Excel comporte plusieurs feuilles, vous devez sélectionner une feuille de travail.
           </li>
-          <li>Une fois les modifications faites, vous pouvez exporter les modifications dans un nouveau document xlsx(attention le nouveau document porte le même nom que le document que vous avez exporter, vous pouvez soit remplacer votre ancien fichier par le nouveau ou bien créer une nouveau document) et/ou au format png pour ensuite pouvoir partagez votre tier tier sur X.
+          <li>
+            Si vous faites des modifications sur une feuille et que vous changez de feuille de travail en cours de route, les modifications ne seront pas sauvegardées.
+          </li>
+          <li>Une fois les modifications faites, vous pouvez exporter les modifications dans un nouveau document xlsx(attention le nom du nouveau document sera par défaut le nom du document importé, vous pouvez soit remplacer votre ancien fichier par le nouveau ou bien créer une nouveau document) et/ou au format png pour ensuite pouvoir partagez votre tier tier sur X ou ailleurs.
           </li>
         </ul>
       </section>}
