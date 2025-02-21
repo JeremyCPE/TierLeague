@@ -3,7 +3,7 @@ import { read } from 'xlsx'
 import type { WorkBook } from "xlsx"
 import { ExcelPosition, Player, Team } from '../types'
 import { v4 as uuidv4 } from 'uuid'
-import { Upload } from 'lucide-react'
+import { Upload, FileSpreadsheet } from 'lucide-react'
 import { excelPosition } from '../data/excel.data'
 import { roles } from '../data/common.data'
 import { teamLogos } from '../data/logo.data'
@@ -19,49 +19,66 @@ interface ExcelInterface {
 
 export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange, onWorkbookChange, onSheetsChange, selectedSheet, onLoading }) => {
   const [workBook, setWorkBook] = useState<WorkBook | null>(null)
-
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  // Permet lorsqu'on clique sur le bouton pour importer de faire comme si on cliquait sur le input
-  const handleButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
+  // 1. Initial load effect
+  useEffect(() => {
+    const loadTemplate = async () => {
+      onLoading(true)
+      try {
+        const response = await fetch('/template/Template.xlsx')
+        const arrayBuffer = await response.arrayBuffer()
+        const data = new Uint8Array(arrayBuffer)
+        const workbook = read(data, { type: 'array' })
+        handleWorkbookLoad(workbook, 'Template.xlsx')
+      } catch (error) {
+        console.error('Error loading template:', error)
+      }
+      onLoading(false)
     }
-  }
-  const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onLoading(true)
-    const file = event.target.files?.[0]
-    if (!file) return
-    const fileName = file.name
 
-    const reader = new FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target?.result as ArrayBuffer)
-      const workbook = read(data, { type: 'array' })
+    loadTemplate()
+  }, [])
 
-      setWorkBook(workbook)
-      onWorkbookChange(workbook, fileName)
+  // 2. Sheet change effect
+  useEffect(() => {
+    if (workBook && selectedSheet) {
+      onLoading(true)
+      handleSheetChange(selectedSheet)
+      onLoading(false)
+    }
+  }, [workBook, selectedSheet])
 
-      // Transformer les noms des feuilles en objets { name: string }
-      const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }))
+  // 3. Core workbook handling methods
+  const handleWorkbookLoad = (workbook: WorkBook, fileName: string) => {
+    setWorkBook(workbook)
+    onWorkbookChange(workbook, fileName)
+
+    const formattedSheets = workbook.SheetNames.map(sheet => ({ name: sheet }))
+    onSheetsChange(formattedSheets)
+
+
+    if (formattedSheets.length > 0) {
+      const firstSheet = formattedSheets[0].name
       onSheetsChange(formattedSheets)
-
-      if (formattedSheets.length === 1) {
-        onSheetsChange(formattedSheets)
-        setTimeout(() => { // Le timeout permet a react de terminer la mise à jour de selectedSheet dans App.tsx avant d'executer cette partie
-          handleSheetChange(formattedSheets[0].name)
+      handleSheetChange(firstSheet)
+      
+      if (firstSheet !== selectedSheet) {
+        setTimeout(() => {
+          const selectElement = document.getElementById('sheet-select') as HTMLSelectElement
+          if (selectElement) {
+            selectElement.value = firstSheet
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }))
+          }
         }, 0)
       }
     }
-    onLoading(false)
   }
 
   const handleSheetChange = (sheetName: string) => {
     if (!workBook) return
 
     let allPlayers: Player[] = []
-
     const teams = generateTeams(workBook, sheetName, excelPosition)
 
     teams.forEach((team, index) => {
@@ -73,17 +90,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
     onTeamsChange(teams)
   }
 
-  // Permet de charger automatiquement les données après avoir sélectionner un document à charger
-  useEffect(() => {
-    if (workBook && selectedSheet) {
-      onLoading(true)
-      handleSheetChange(selectedSheet)
-      onLoading(false)
-    }
-  }, [workBook, selectedSheet])
-
-
-
+  // 4. Data generation methods
   const generateTeams = (workBook: WorkBook, sheetName: string, excelPosition: ExcelPosition[]): Team[] => {
     const teams: Team[] = []
     for (let i = 0; i < excelPosition.length; i++) {
@@ -112,7 +119,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       const playerName = readCell(workbook, sheetName, cellAddress)?.toString()
       const tierAddress = `${excelPosition[index].columnRank}${excelPosition[index].startRow + 1 + i}`
       const playerTier = readCell(workbook, sheetName, tierAddress)
-      if (!playerName) continue // Ignorer les cellules vides
+      if (!playerName) continue
 
       players.push({
         id: uuidv4(),
@@ -127,13 +134,38 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
     return players
   }
 
+  // 5. Utility methods
   const readCell = (workbook: WorkBook, sheetName: string, cellAddress: string): string | null => {
     if (!workbook) return null
     const worksheet = workbook.Sheets[sheetName]
     if (!worksheet) return null
 
     const cell = worksheet[cellAddress]
-    return cell ? cell.v : null // `.v` contient la valeur brute de la cellule
+    return cell ? cell.v : null
+  }
+
+  // 6. UI event handlers
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const importFromExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onLoading(true)
+    const file = event.target.files?.[0]
+    if (!file) return
+    const fileName = file.name
+
+    const reader = new FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer)
+      const workbook = read(data, { type: 'array' })
+
+      handleWorkbookLoad(workbook, fileName)
+    }
+    onLoading(false)
   }
 
   return (

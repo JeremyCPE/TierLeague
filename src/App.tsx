@@ -5,8 +5,10 @@ import LFLLogo from './assets/lfl_logo.png'
 import LECLogo from './assets/LEC_Logo.png'
 import { Player, Team } from './types'
 import { FileImage, FileSpreadsheet, Upload } from 'lucide-react'
-import { WorkBook, writeFile } from 'xlsx'
+import { WorkBook, writeFile, read,  } from 'xlsx'
+import { WelcomeSection } from './components/WelcomeSection'
 import { toPng } from 'html-to-image'
+import { ExportButtons } from './components/ExportButtons'
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([])
@@ -65,7 +67,6 @@ function App() {
   const handleSheetSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sheetName = event.target.value
     setSelectedSheet(sheetName)
-
   }
 
   const handleOnSheetsChange = (sheetsList: { name: string }[]) => {
@@ -81,44 +82,6 @@ function App() {
   const handleLoading = (updateLoading: boolean) => {
     setLoading(updateLoading)
   }
-
-  const exportToExcel = async () => {
-    if (!workbook) return
-
-    const worksheet = workbook.Sheets[selectedSheet]
-    if (!worksheet) return
-
-    teams.forEach((team) => {
-      worksheet[team.rankAddress] = { v: team.rank }
-
-      players.forEach((player) => {
-        worksheet[player.tierAddress] = { v: player.tier }
-      })
-    })
-    // Sauvegarde du fichier mis à jour
-    writeFile(workbook, `${fileName}`, { bookType: "xlsx", type: "file" });
-  }
-
-  const exportToPng = async () => {
-    if (!workbook) return
-    const worksheet = workbook.Sheets[selectedSheet]
-    if (!worksheet) return
-
-    if (tierListRef.current) {
-      const originalDisplay = tierListRef.current.style.display
-      tierListRef.current.style.display = "block";
-      const pngDataUrl = await toPng(tierListRef.current, {
-        quality: 1.0,
-        skipFonts: true // Évite les erreurs de lecture des CSS distants
-      });
-      const link = document.createElement('a')
-      link.download = 'my-lflrank2025'
-      link.href = pngDataUrl
-      link.click()
-      tierListRef.current.style.display = originalDisplay
-    }
-  }
-
   return (
     <>
       <header className='bg-black text-white'>
@@ -136,8 +99,12 @@ function App() {
                 <div className="w-[200px] h-[40px] flex items-center">
                   {sheets.length > 0 && (
                     <div className="w-full">
-                      <select id="sheet-select" value={selectedSheet} onChange={handleSheetSelection} className="bg-[#251c0d] border text-white w-fit px-4 py-3 rounded-full hover:bg-[#15100c] transition-colors text-center">
-                        <option value="" className='bg-black text-left'>-- Sélectionner une feuille --</option>
+                      <select 
+                        id="sheet-select" 
+                        value={selectedSheet} 
+                        onChange={handleSheetSelection} 
+                        className="bg-[#251c0d] border text-white w-fit px-4 py-3 rounded-full hover:bg-[#15100c] transition-colors text-center"
+                      >
                         {sheets.map((sheet) => (
                           <option key={sheet.name} value={sheet.name} className='bg-black'>
                             {sheet.name}
@@ -148,36 +115,19 @@ function App() {
                   )}
                 </div>
               </div>
-              <div className='flex flex-1 justify-end text-white' ref={dropdownRef}>
-                <button onClick={toggleDropdown}
-                  className="bg-[#251c0d] border text-white px-3 py-3 rounded-full flex items-start gap-2 hover:bg-[#15100c] transition-colors md:space-x-2">
-                  <Upload className="w-5 h-5" />
-                  <span className='hidden md:inline'>
-                    Export vers ...
-                  </span>
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-[#15100c] border border-[#251c0d] rounded-md shadow-lg z-50">
-                    <button onClick={() => { setIsDropdownOpen(false); exportToExcel(); }}
-                      className="block w-full text-left px-4 py-2 text-white hover:bg-[#251c0d] transition">
-                      <FileSpreadsheet className="w-4 h-4 inline-block mr-2" />
-                      Export Excel
-                    </button>
-                    <button onClick={() => { setIsDropdownOpen(false); exportToPng(); }}
-                      className="block w-full text-left px-4 py-2 text-white hover:bg-[#251c0d] transition">
-                      <FileImage className="w-4 h-4 inline-block mr-2" />
-                      Export PNG
-                    </button>
-                  </div>
-                )}
-                {loading && <div className="spinner"></div>}
-              </div>
-
+              <ExportButtons
+                workbook={workbook}
+                selectedSheet={selectedSheet}
+                teams={teams}
+                players={players}
+                fileName={fileName}
+                tierListRef={tierListRef}
+              />
             </div>
           </div>
         </nav>
       </header>
-
+      <WelcomeSection />
       <div className="min-h-screen bg-black flex py-8 px-4 overflow-hidden">
         <div className='max-w-6xl mx-auto'>
           <TierList ref={tierListRef} fullteams={teams} fullplayers={players} {...(logo ? { logo } : {})} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} />
