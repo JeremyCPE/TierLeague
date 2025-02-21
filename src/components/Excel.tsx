@@ -3,7 +3,7 @@ import { read } from 'xlsx'
 import type { WorkBook } from "xlsx"
 import { ExcelPosition, Player, Team } from '../types'
 import { v4 as uuidv4 } from 'uuid'
-import { Upload, FileSpreadsheet } from 'lucide-react'
+import { Upload} from 'lucide-react'
 import { excelPosition } from '../data/excel.data'
 import { roles } from '../data/common.data'
 import { teamLogos } from '../data/logo.data'
@@ -62,7 +62,7 @@ export const Excel: React.FC<ExcelInterface> = ({ onPlayersChange, onTeamsChange
       const firstSheet = formattedSheets[0].name
       onSheetsChange(formattedSheets)
       handleSheetChange(firstSheet)
-      
+
       if (firstSheet !== selectedSheet) {
         setTimeout(() => {
           const selectElement = document.getElementById('sheet-select') as HTMLSelectElement

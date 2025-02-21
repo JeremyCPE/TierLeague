@@ -11,7 +11,7 @@ import { ExportButtons } from './components/ExportButtons'
 function App() {
   const [players, setPlayers] = useState<Player[]>([])
   const [teams, setTeams] = useState<Team[]>([])
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const [workbook, setWorkbook] = useState<WorkBook | null>(null)
   const [fileName, setFileName] = useState("")
   const [sheets, setSheets] = useState<{ name: string }[]>([])
