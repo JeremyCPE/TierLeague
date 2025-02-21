@@ -13,7 +13,7 @@ export const WelcomeSection: React.FC = () => {
             <li>
               Téléchargez le{' '}
               <a 
-                href="https://github.com/JeremyCPE/TierLeague/blob/main/template/Template.xlsx" 
+                href="https://github.com/JeremyCPE/TierLeague/tree/main/public/template" 
                 className="font-semibold text-amber-400 hover:text-amber-300 transition-colors"
               >
                 template
