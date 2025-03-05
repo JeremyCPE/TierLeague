@@ -9,7 +9,7 @@ interface TeamRankInputProps {
   onUpdateRank: (team: Team, rank: number) => void;
 }
 
-export const TeamRankInput: React.FC<TeamRankInputProps> = ({ team, teamsLength, rank, onUpdateRank, hideChevron }) => {
+export const TeamsRankInput: React.FC<TeamRankInputProps> = ({ team, teamsLength, rank, onUpdateRank, hideChevron }) => {
 
   // C'est normal que le rank s'initialise à 1 et non pas à 0, car le rank 0
   return (

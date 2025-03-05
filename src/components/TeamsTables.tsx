@@ -1,8 +1,9 @@
 import React from 'react';
-import { Player, Tier, } from '../types';
+import { Player } from '../types';
 import { roleLogos } from '../data/roles';
-import { TeamRankInput } from './TeamRankInput';
+import { TeamsRankInput } from './TeamsRankInput';
 import { Team } from '../types';
+import { tierLevel } from '../data/common.data';
 
 interface TeamTableProps {
   team: Team;
@@ -13,7 +14,7 @@ interface TeamTableProps {
   hideChevron: boolean
 }
 
-export const TeamTables: React.FC<TeamTableProps> = ({
+export const TeamsTables: React.FC<TeamTableProps> = ({
   team,
   teamsLength,
   players,
@@ -21,20 +22,6 @@ export const TeamTables: React.FC<TeamTableProps> = ({
   onUpdateTeamRank,
   hideChevron
 }) => {
-  const tierLevel: Tier[] = [
-    { tier: '-', color: 'text-white' },
-    { tier: 'G', color: 'text-red-600' },
-    { tier: 'S+', color: 'text-yellow-400' },
-    { tier: 'S', color: 'text-yellow-300' },
-    { tier: 'S-', color: 'text-yellow-200' },
-    { tier: 'A+', color: 'text-green-400' },
-    { tier: 'A', color: 'text-green-300' },
-    { tier: 'A-', color: 'text-green-200' },
-    { tier: 'B+', color: 'text-blue-400' },
-    { tier: 'B', color: 'text-blue-300' },
-    { tier: 'B-', color: 'text-blue-200' },
-    { tier: 'C', color: 'text-purple-400' },
-  ];
 
   const teamPlayers = players.filter(player => player.teamId === team.id);
 
@@ -46,7 +33,7 @@ export const TeamTables: React.FC<TeamTableProps> = ({
         <img src={team.logo} className='w-1/4 h-1/4'></img>
         <h2 className="text-lg font-bold text-white text-center">{team.name}</h2>
         <div className="flex items-center space-x-4">
-          <TeamRankInput
+          <TeamsRankInput
             team={team}
             teamsLength={teamsLength}
             rank={team.rank}

@@ -1,19 +1,26 @@
 
 import { useState } from "react";
 import { Player } from "../types";
-import { tierLevel } from "../data/common.data"; // Liste des tiers
+import { roles, tierLevel } from "../data/common.data"; // Liste des tiers
 
-interface RoleGroup {
-  role: string;
+interface RolesTablesProps {
   players: Player[];
 }
 
-interface RolesTablesProps {
-  playersByRole: RoleGroup[];
-}
+export const RolesTables: React.FC<RolesTablesProps> = ({ players }) => {
+  console.log("rolesTables render", players);
 
-export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
-  console.log("rolesTables render", playersByRole);
+  const playersByRole = roles.map((role) => ({
+    role,
+    players: [] as Player[]
+  }))
+
+  players.forEach(player => {
+    const roleGroup = playersByRole.find(group => group.role === player.role)
+    if (roleGroup) {
+      roleGroup.players.push(player)
+    }
+  })
 
   // États pour stocker les joueurs classés (nom + tier)
   const [rankedPlayers, setRankedPlayers] = useState<{ [role: string]: ({ name: string; tier: string } | null)[] }>(
@@ -76,6 +83,8 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
     });
   };
 
+
+
   return (
     <div className="flex flex-col space-y-8 px-4">
       {/* TABLEAUX DE CLASSEMENT */}
@@ -84,17 +93,21 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
           <div key={role} className="w-full">
             <h2 className="text-lg font-bold text-white text-center mb-2">{role}</h2>
             <table className="w-full border-collapse border border-gray-600">
-              <thead>
-                <tr>
-                  <th className="border border-gray-600 px-4 py-2 text-white">Joueur</th>
-                  <th className="border border-gray-600 px-4 py-2 text-white">Tier</th>
-                  <th className="border border-gray-600 px-4 py-2 text-white"></th>
-                </tr>
-              </thead>
               <tbody>
                 {rankedPlayers[role].map((playerData, rowIndex) => (
                   <tr key={rowIndex} className="border border-gray-600">
-                    <td className="pl-4 py-2 text-white flex items-center space-x-2">
+                    {/* Bouton de suppression */}
+                    <td className="py-1">
+                      {playerData && (
+                        <button
+                          onClick={() => removeRankedPlayer(role, rowIndex)}
+                          className="ml-2 px-2 py-1 text-sm bg-red-600 text-white rounded"
+                        >
+                          X
+                        </button>
+                      )}
+                    </td>
+                    <td className="px-1 py-2 text-white flex items-center space-x-2 w-32">
                       {/* Input avec autocomplétion */}
                       <input
                         type="text"
@@ -105,6 +118,7 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
                         onBlur={(e) => {
                           if (!e.target.value) removeRankedPlayer(role, rowIndex);
                         }}
+                        spellCheck={false}
                       />
                       <datalist id={`autocomplete-${role}-${rowIndex}`}>
                         {availablePlayers[role].map((player) => (
@@ -113,10 +127,10 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
                       </datalist>
                     </td>
                     {/* Sélection du tier */}
-                    <td className="pl-4 py-2">
+                    <td className="p-1">
                       {playerData && (
                         <select
-                          className="bg-gray-700 text-white p-1 rounded w-full"
+                          className="bg-gray-700 text-white p-1 rounded w-12"
                           value={playerData.tier}
                           onChange={(e) => updateTier(role, rowIndex, e.target.value)}
                         >
@@ -126,17 +140,6 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ playersByRole }) => {
                             </option>
                           ))}
                         </select>
-                      )}
-                    </td>
-                    {/* Bouton de suppression */}
-                    <td className="pl-4 py-2">
-                      {playerData && (
-                        <button
-                          onClick={() => removeRankedPlayer(role, rowIndex)}
-                          className="ml-2 px-2 py-1 text-sm bg-red-600 text-white rounded"
-                        >
-                          X
-                        </button>
                       )}
                     </td>
                   </tr>

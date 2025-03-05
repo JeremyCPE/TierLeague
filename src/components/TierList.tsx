@@ -1,8 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react'
 import { TeamsTables } from './TeamsTables'
 import { Player, Team } from '../types'
-import { roles } from '../data/common.data'
-import { RolesTables } from './RolesTable'
+import { RolesTables } from './RolesTables'
 
 interface TierListProps {
   fullplayers: Player[]
@@ -33,16 +32,6 @@ export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ 
     }
   }, [fullteams]);
 
-
-  // useEffect(() => {
-  //   if (JSON.stringify(players) !== JSON.stringify(fullplayers)) {
-  //     setPlayers(fullplayers);
-  //   }
-  //   if (JSON.stringify(teamsRanking) !== JSON.stringify(fullteams)) {
-  //     setTeamRanking(fullteams);
-  //   }
-  // }, [fullplayers, fullteams]);
-
   const updatePlayerTier = (playerId: string, tier: string) => {
     const updatedPlayers = players.map(p => (p.id === playerId ? { ...p, tier } : p))
     setPlayers(updatedPlayers)
@@ -57,21 +46,6 @@ export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ 
     setTeamRanking(updatedTeams)
     onTeamsChange(updatedTeams)
   }
-
-  const playersByRole = roles.map((role) => ({
-    role,
-    players: [] as Player[]
-  }))
-
-  players.forEach(player => {
-    const roleGroup = playersByRole.find(group => group.role === player.role)
-    if (roleGroup) {
-      roleGroup.players.push(player)
-    }
-  })
-
-
-  console.log('pbr', playersByRole);
 
   const renderRanking = (hideChevron: boolean) => {
     if (rankingMode === 'teams') {
@@ -93,7 +67,7 @@ export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ 
     } else {
       return (
         <RolesTables
-          playersByRole={playersByRole}
+          players={players}
         />
       )
     }

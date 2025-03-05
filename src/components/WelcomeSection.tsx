@@ -48,6 +48,9 @@ export const WelcomeSection: React.FC = () => {
             <li>
               Et exportez en format xlsx ou png !
             </li>
+            <li>
+              Si vous voyez des bugs, n'hésitez pas à envoyer un message sur Twitter
+            </li>
           </ul>
         </section>
       )}
