@@ -6,13 +6,12 @@ import { RolesTables } from './RolesTables'
 interface TierListProps {
   fullplayers: Player[]
   fullteams: Team[]
-  logo?: string
   onPlayersChange: (players: Player[]) => void
   onTeamsChange: (teams: Team[]) => void
   rankingMode: string
 }
 
-export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ fullplayers, fullteams, logo, onPlayersChange, onTeamsChange, rankingMode }, ref) => {
+export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ fullplayers, fullteams, onPlayersChange, onTeamsChange, rankingMode }, ref) => {
   console.log('tierList render');
 
   const [players, setPlayers] = useState<Player[]>(fullplayers)
@@ -75,9 +74,6 @@ export const TierList = React.memo(forwardRef<HTMLDivElement, TierListProps>(({ 
 
   return (
     <div ref={ref} className="bg-[#251c0d]">
-      <div className="px-4 py-4 flex items-center w-25">
-        {logo && <img src={logo} alt="Competition Logo" className="w-16" />}
-      </div>
       {renderRanking(false)}
       <footer className="text-gray-400 text-xs text-center mt-6">
         <p>@_RedSeeds @than_ontweeter @VongoSanDi</p>

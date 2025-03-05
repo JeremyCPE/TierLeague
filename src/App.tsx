@@ -100,7 +100,7 @@ function App() {
                 onSheetsChange={handleOnSheetsChange}
                 selectedSheet={selectedSheet}
               />
-              <div className="flex flex-1 justify-center space-x-8 px-0 mx-0">
+              <div className="flex flex-1 items-center space-x-8 px-0 mx-0">
                 <div className="w-[200px] h-[40px] flex items-center">
                   {sheets.length > 0 && (
                     <div className="w-full">
@@ -118,6 +118,9 @@ function App() {
                       </select>
                     </div>
                   )}
+                </div>
+                <div className='flex'>
+                  <img src={logo} alt="Competition Logo" className="w-16" />
                 </div>
               </div>
               <ExportButtons
@@ -152,7 +155,7 @@ function App() {
               Ranking Roles
             </button>
           </div>
-          <TierList ref={tierListRef} fullteams={memoizedTeams} fullplayers={memoizedPlayers} {...(logo ? { logo } : {})} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} rankingMode={rankingView} />
+          <TierList ref={tierListRef} fullteams={memoizedTeams} fullplayers={memoizedPlayers} onPlayersChange={handleOnPlayersChange} onTeamsChange={handleOnTeamsChange} rankingMode={rankingView} />
         </div>
       </div>
     </>
