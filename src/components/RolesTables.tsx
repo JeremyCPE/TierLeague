@@ -86,12 +86,12 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ players }) => {
 
 
   return (
-    <div className="flex flex-col space-y-8 px-4">
+    <div className="flex flex-col space-y-2 px-4">
       {/* TABLEAUX DE CLASSEMENT */}
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-5 gap-4 py-0">
         {playersByRole.map(({ role }) => (
           <div key={role} className="w-full">
-            <h2 className="text-lg font-bold text-white text-center mb-2">{role}</h2>
+            <h2 className="text-lg font-bold text-white text-center mb-1">{role}</h2>
             <table className="w-full border-collapse border border-gray-600">
               <tbody>
                 {rankedPlayers[role].map((playerData, rowIndex) => {
@@ -99,7 +99,7 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ players }) => {
                   const playerColor = tierLevel.find(d => d.tier === playerData?.tier)?.color
 
                   return (
-                    <tr key={rowIndex} className="border border-gray-600">
+                    <tr key={rowIndex} className="border border-gray-600 py-8">
                       {/* Bouton de suppression */}
                       <td className="py-1">
                         {playerData && (
@@ -111,7 +111,7 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ players }) => {
                           </button>
                         )}
                       </td>
-                      <td className="px-1 py-2 text-white flex items-center space-x-2 w-32">
+                      <td className="px-1 py-1 text-white flex items-center space-x-2 w-32">
                         {/* Input avec autocomplétion */}
                         <input
                           type="text"
@@ -160,7 +160,7 @@ export const RolesTables: React.FC<RolesTablesProps> = ({ players }) => {
       <div className="grid grid-cols-5 gap-4">
         {playersByRole.map(({ role }) => (
           <div key={role} className="w-full">
-            <h2 className="text-lg font-bold text-white text-center mb-2">Joueurs disponibles {role}</h2>
+            <h2 className="text-lg font-bold text-white text-center mb-2 pb-1">Joueurs disponibles {role}</h2>
             <div className="border border-gray-600 p-2 rounded">
               {availablePlayers[role].length === 0 ? (
                 <p className="text-gray-400 text-center">Aucun joueur disponible</p>

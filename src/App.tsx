@@ -136,7 +136,7 @@ function App() {
         </nav>
       </header>
       <WelcomeSection />
-      <div className="min-h-screen bg-black flex py-8 px-4 overflow-hidden">
+      <div className="min-h-screen bg-black flex py-1 px-4 overflow-hidden">
         <div className='max-w-6xl mx-auto'>
           <div className="flex justify-center space-x-8 mt-4">
             <button
